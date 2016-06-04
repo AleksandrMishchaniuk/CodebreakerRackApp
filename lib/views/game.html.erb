@@ -1,5 +1,57 @@
 <% if status == 'no_game' %>
+
   <h3>For starting game click 
-    <a href="game/new">hier</a>
+    <a href="/game/new">hier</a>
   </h3>
+
+<% else %>
+
+  <% if ['win', 'lose'].include? status %>
+    <h2>You <%= status.upcase %></h2>
+    <h3>secret code: <%= code %></h3>
+    <form method="POST" action="/game/save">
+      <input type="text" name="user_name" placeholder="Type your name"/>
+      <input type="submit" value="Save" />
+    </form>
+  <% end %>
+
+  <p>Attempts lost: <%= attempts_cnt %></p>
+  <p>
+    Hints lost: <%= hints_cnt %> 
+    <% if hints_cnt > 0 %>
+      <a href="/hint">Get hint</a>
+    <% end %>
+  </p>
+
+  <p>Hint: <%= hint_val %></p>
+  <p>Attempts:</p>
+
+  <% if attempts_val.size > 0 %>
+    <table>
+      <tr>
+        <th>guess</th>
+        <th>result</th>
+      </tr>
+      <% attempts_val.each do |attempt| %>
+        <tr>
+          <th><%= attempt[:guess] %></th>
+          <th><%= attempt[:result] %></th>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+
+  <br/>
+
+  <% unless ['win', 'lose'].include? status %>
+    <form method="POST" action="/game">
+      <input type="text" name="guess" placeholder="Type your guess (4 numbers 1...6)" maxlength="4" />
+      <input type="submit" value="Make attempt" />
+      <br/>
+      <% if msg %>
+        <span><%= msg %></span>
+      <% end %>
+    </form>
+  <% end %>
+
 <% end %>
