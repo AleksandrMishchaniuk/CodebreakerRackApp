@@ -14,3 +14,15 @@ body {
 a {
   color: #0000FF;
 }
+#header{
+  padding: 20px;
+}
+#right_nav{
+  float: right;
+}
+#left_nav{
+  float: left;
+}
+hr{
+  clear: both;
+}

@@ -1,15 +1,17 @@
 require "codebreaker"
 require "erb"
 require "./lib/controller/game"
-require "./lib/controller/result"
  
 class Racker
   def self.call(env)
     new(env).response.finish
   end
    
+  attr_reader :content
   @@geters = []
+
   def initialize(env)
+    @content = 'index'
     @request = Rack::Request.new(env)
     undef_geters
   end
@@ -17,11 +19,13 @@ class Racker
   def response
     controller = GameController.new(@request)
     case @request.path
-    when "/" then Rack::Response.new(render("index.html.erb"))
+    when "/"
+      @content = 'index'
+      Rack::Response.new(render())
     when "/game"
-      params = controller.game_action
-      def_geters(params)
-      Rack::Response.new(render("game.html.erb"))
+      @content = 'game'
+      def_geters(controller.game_action)
+      Rack::Response.new(render())
     when "/game/new"
       controller.new_action
       Rack::Response.new do |response|
@@ -38,20 +42,20 @@ class Racker
         response.redirect("/game")
       end
     when "/results"
-      params = controller.results_action
-      def_geters(params)
-      Rack::Response.new(render("results.html.erb"))
+      @content = 'results'
+      def_geters(controller.results_action)
+      Rack::Response.new(render())
     else Rack::Response.new("Not Found", 404)
     end
   end
    
-  def render(template)
-    path = File.expand_path("../views/#{template}", __FILE__)
+  def render(template = "layout")
+    path = File.expand_path("../views/#{template}.html.erb", __FILE__)
     ERB.new(File.read(path)).result(binding)
   end
 
   def def_geters(params)
-    class.class_eval do
+    self.class.class_eval do
       params.each do |name, val|
         @@geters << name
         define_method name do
@@ -62,7 +66,7 @@ class Racker
   end
 
   def undef_geters
-    class.class_eval do
+    self.class.class_eval do
       @@geters.each {|geter| remove_method geter}
       @@geters = []
     end

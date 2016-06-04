@@ -6,12 +6,19 @@
   </head>
   <body>
     <div id="container">
-      <h1>You said '<%= word %>'</h1>
-      <p>Say somthing new</p>
-      <form method="post" action="/update_word">
-        <input name="word" type="text">
-        <input type="submit" value="Say!">
-      </form>
+      <div id='header'>
+        <div id="left_nav">
+          <a href="game/new">New Game</a>
+          <a href="results">See results</a>
+        </div>
+        <div id="right_nav">
+          <a href="game">Game</a>
+        </div>
+      </div>
+      <hr/>
+      <div id='content'>
+        <%= render(content) %>
+      </div>
     </div>
   </body>
 </html>
