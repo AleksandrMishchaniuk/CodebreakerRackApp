@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WEB page</title>
+    <link rel="stylesheet" href="/css/app.css" type="text/css">
+  </head>
+  <body>
+    <div id="container">
+      <h1>You said '<%= word %>'</h1>
+      <p>Say somthing new</p>
+      <form method="post" action="/update_word">
+        <input name="word" type="text">
+        <input type="submit" value="Say!">
+      </form>
+    </div>
+  </body>
+</html>
