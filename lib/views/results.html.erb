@@ -1,0 +1,21 @@
+<h2>Results</h2>
+
+<table>
+  <tr>
+    <th>User name</th>
+    <th>Game status</th>
+    <th>Attempts</th>
+    <th>Hints</th>
+    <th>Date and time</th>
+  </tr>
+
+  <% results.each do |result| %>
+    <tr>
+      <td><%= result[:user_name] %></td>
+      <td><%= result[:status] %></td>
+      <td><%= result[:attempts] %></td>
+      <td><%= result[:hints]%></td>
+      <td><%= result[:datetime] %></td>
+    </tr>
+  <% end %>
+</table>

@@ -3,4 +3,5 @@
 source "https://rubygems.org"
 
 # gem "rails"
+gem "rack"
 gem "codebreaker", :git => "https://github.com/AleksandrMishchaniuk/codebreaker.git"

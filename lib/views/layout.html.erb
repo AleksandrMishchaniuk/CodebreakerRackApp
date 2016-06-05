@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WEB page</title>
+    <link rel="stylesheet" href="/css/app.css" type="text/css">
+  </head>
+  <body>
+    <div id="container">
+      <div id='header'>
+        <div id="left_nav">
+          <a href="/">Start page</a> | |
+          <a href="game/new">New Game</a> | |
+          <a href="results">See results</a>
+        </div>
+        <div id="right_nav">
+          <a href="game">Game</a>
+        </div>
+      </div>
+      <hr/>
+      <div id='content'>
+        <%= render(content) %>
+      </div>
+    </div>
+  </body>
+</html>
