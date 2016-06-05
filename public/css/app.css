@@ -26,3 +26,12 @@ a {
 hr{
   clear: both;
 }
+
+table{
+  border-collapse: collapse;
+}
+td, th{
+  padding: 5px 10px;
+  border: solid 1px black;
+  text-align: center;
+}

@@ -1,6 +1,6 @@
 require "codebreaker"
 require "erb"
-require "./lib/controller/game"
+require "./lib/controller/game-controller"
  
 class Racker
   def self.call(env)
@@ -18,33 +18,40 @@ class Racker
    
   def response
     controller = GameController.new(@request)
+    
     case @request.path
     when "/"
       @content = 'index'
       Rack::Response.new(render())
+    
     when "/game"
       @content = 'game'
       def_geters(controller.game_action)
       Rack::Response.new(render())
+    
     when "/game/new"
       controller.new_action
       Rack::Response.new do |response|
         response.redirect("/game")
       end
+    
     when "/game/save"
       controller.save_action
       Rack::Response.new do |response|
         response.redirect("/results")
       end
+    
     when "/hint"
       controller.hint_action
       Rack::Response.new do |response|
         response.redirect("/game")
       end
+    
     when "/results"
       @content = 'results'
       def_geters(controller.results_action)
       Rack::Response.new(render())
+    
     else Rack::Response.new("Not Found", 404)
     end
   end

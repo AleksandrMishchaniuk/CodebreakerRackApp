@@ -19,7 +19,7 @@ class GameController
         if valid_guess(@request.params['guess'])
           result = @manager.guess_result( @request.params['guess'] )
           status = 'win' if result == '++++'
-          status = 'lose' if @manager.get_variables[0] == 0
+          status = 'lose' if @manager.attempts_count == 0
           @request.session[:game][:attempts] << { 
                                                   guess: @request.params['guess'],
                                                   result: result
@@ -32,9 +32,9 @@ class GameController
       status = @request.session[:game][:status]
       code = @manager.secret_code
       hint_val = @request.session[:game][:hint]
-      hints_cnt = @manager.get_variables[1]
+      hints_cnt = @manager.hints_count
       attempts_val = @request.session[:game][:attempts]
-      attempts_cnt = @manager.get_variables[0]
+      attempts_cnt = @manager.attempts_count
     end
 
     {
@@ -57,15 +57,34 @@ class GameController
 
   def save_action
     if @manager && @request.params['user_name'] && \
-                  @request.params['user_name'] =~ @manager.user_name_pattern
+                  valid_name(@request.params['user_name'])
         @manager.user_name = @request.params['user_name']
         @manager.save_game_data
         @request.session[:game] = nil
     end
   end
 
+  def results_action
+    rows = Codebreaker::Manager.new.get_saved_results.split("\n")
+    rows.map! { |row| row.split("|") }
+    results = rows.map do |row|
+                {
+                  user_name: row[0],
+                  status: row[1],
+                  attempts: row[2],
+                  hints: row[3],
+                  datetime: row[4]
+                }
+              end
+    { results: results }
+  end
+
   def valid_guess(guess)
-    guess =~ /^[1-6]{4}$/
+    guess =~ @manager.guess_pattern
+  end
+
+  def valid_name(name)
+    name =~ @manager.user_name_pattern
   end
 
 end
